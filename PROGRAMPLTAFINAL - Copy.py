@@ -169,45 +169,40 @@ if st.button("Jalankan Forecast") and bulan_dipilih:
     st.pyplot(fig2)
     
     st.dataframe(df)
-# =========================================
-# LINE CHART FORECAST DAYA PLTA
-# =========================================
-st.subheader("Grafik Time Series Daya PLTA (Forecast)")
+# =============================
+    # LINE CHART FORECAST PLTA
+    # =============================
+    st.subheader("Grafik Time Series Daya PLTA (Forecast)")
 
-# Urutan bulan (boleh pakai ulang)
-urutan_bulan = [
-    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-]
+    urutan_bulan = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ]
 
-# Pastikan kolom forecast ada
-if "Bulan" in df.columns and "Daya PLTA (kW)" in df.columns:
+    if "Bulan" in df.columns and "Daya PLTA (kW)" in df.columns:
 
-    # Set kategori bulan (AMAN meskipun sudah diset sebelumnya)
-    df["Bulan"] = pd.Categorical(
-        df["Bulan"],
-        categories=urutan_bulan,
-        ordered=True
-    )
+        df["Bulan"] = pd.Categorical(
+            df["Bulan"],
+            categories=urutan_bulan,
+            ordered=True
+        )
 
-    df = df.sort_values("Bulan")
+        df = df.sort_values("Bulan")
 
-    # Buat figure BARU (tidak ganggu bar chart)
-    fig3, ax3 = plt.subplots()
+        fig3, ax3 = plt.subplots()
+        ax3.plot(
+            df["Bulan"],
+            df["Daya PLTA (kW)"],
+            marker='o'
+        )
 
-    ax3.plot(
-        df["Bulan"],
-        df["Daya PLTA (kW)"],
-        marker='o',
-        linewidth=2
-    )
+        ax3.set_xlabel("Bulan")
+        ax3.set_ylabel("Daya (kW)")
+        ax3.set_title("Tren Forecast Daya PLTA")
+        ax3.grid(True)
 
-    ax3.set_xlabel("Bulan")
-    ax3.set_ylabel("Daya (kW)")
-    ax3.set_title("Tren Forecast Daya PLTA")
-    ax3.grid(True)
+        st.pyplot(fig3)
 
-    st.pyplot(fig3)
+    else:
+        st.error("Kolom 'Bulan' atau 'Daya PLTA (kW)' tidak ditemukan")
 
-else:
-    st.warning("Kolom 'Bulan' atau 'Daya PLTA (kW)' tidak ditemukan")
